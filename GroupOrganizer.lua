@@ -21,7 +21,7 @@ local roletab = { "dps" , "heal", "tank", "rogue", "mage", "warlock", "warr", "h
 local dungeonMinTab = {}
 local dungeonMaxTab = {}
 
-local maxMinutes = 20
+local maxMinutes = 10
 
 function GROUPORGANIZER__wait(delay, func, ...)
   if(type(delay)~="number" or type(func)~="function") then
