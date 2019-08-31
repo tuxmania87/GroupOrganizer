@@ -1,0 +1,6 @@
+## Interface: 11302
+## Title: GroupOrganizer
+## Notes: keeps track of LFG LFM messages and summarizes them
+## Author: Lesta
+## SavedVariables: go_mtab, go_ttab
+GroupOrganizer.lua
