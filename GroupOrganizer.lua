@@ -76,7 +76,9 @@ end
 function stringsplit(s, sep)
 	local res = {}
 	for i in string.gmatch(s, "%S+") do
-		table.insert(res, i)
+		local x,_ = string.gsub(i, ",", "")
+		x,_ = string.gsub(x, "\\.","")
+		table.insert(res, x)
 	end
 	return res
 end
@@ -115,7 +117,7 @@ function frame:OnEvent(event,...)
 				for j=1,#v,1 do
 					--ChatFrame1:AddMessage("Compare "..string.lower(splitString[i]).." || "..v[j])
 					if string.lower(splitString[i]) == v[j] then 
-						ChatFrame1:AddMessage("found dungeon: "..k)
+						--ChatFrame1:AddMessage("found dungeon: "..k)
 
 						--extract role(s) 
 						local role = ""
@@ -133,10 +135,10 @@ function frame:OnEvent(event,...)
 						local mode = nil 
 						-- find out if LFM or LFG
 						if(string.match(string.lower(a),"lfg") ~= nil) then 
-							ChatFrame1:AddMessage("found mode: LFG")
+							--ChatFrame1:AddMessage("found mode: LFG")
 							mode = "lfg"
 						elseif(string.match(string.lower(a),"lf.*m?") ~= nil) then 
-							ChatFrame1:AddMessage("found mode: LFM")	
+							--ChatFrame1:AddMessage("found mode: LFM")	
 							mode = "lfm"
 						end
 						
