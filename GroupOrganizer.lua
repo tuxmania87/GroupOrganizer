@@ -76,8 +76,10 @@ end
 function stringsplit(s, sep)
 	local res = {}
 	for i in string.gmatch(s, "%S+") do
-		local x,_ = string.gsub(i, ",", "")
-		x,_ = string.gsub(x, "\\.","")
+		local x,_ = string.gsub(i, ",", " ")
+		x,_ = string.gsub(x, "\\."," ")
+		x,_ = string.gsub(x, "\/"," ")
+		x,_ = string.gsub(x, "!"," ")
 		table.insert(res, x)
 	end
 	return res
@@ -115,7 +117,7 @@ function frame:OnEvent(event,...)
 			--search for dungeon appearance in string 
 			for i=1,#splitString,1 do
 				for j=1,#v,1 do
-					--ChatFrame1:AddMessage("Compare "..string.lower(splitString[i]).." || "..v[j])
+					--ChatFrame1:AddMessage("Iteration: "..splitString[i])
 					if string.lower(splitString[i]) == v[j] then 
 						--ChatFrame1:AddMessage("found dungeon: "..k)
 
@@ -195,6 +197,10 @@ function frame:OnEvent(event,...)
 		dungeonDict["Zul'Farrak"] = { "zf", "farrak", "zul"}
 		dungeonDict["Sunken Temple"] = { "st", "sunken", "temple"}
 		dungeonDict["Blackrock Depths"] = {"brd", "blackrock"}
+		dungeonDict["Upper Blackrock Spire"] = {"ubrs"}
+		dungeonDict["Lower Blackrock Spire"] = {"lbrs"}
+		dungeonDict["Stratholme"] = {"strat","stratholme","strath"}
+		dungeonDict["Scholomance"] = {"scholo","scholomance","schol"}
 		--dungeonDict["Dire Maul"] = {""}
 		
 		
@@ -214,6 +220,10 @@ function frame:OnEvent(event,...)
 		dungeonMinTab["Sunken Temple"] = 44
 		dungeonMinTab["Blackrock Depths"] = 48
 		dungeonMinTab["Dire Maul"] = 56
+		dungeonMinTab["Upper Blackrock Spire"] = 58
+		dungeonMinTab["Lower Blackrock Spire"] = 56
+		dungeonMinTab["Stratholme"] = 58
+		dungeonMinTab["Scholomance"] = 58
 		
 		dungeonMaxTab["Ragefire Chasm"] = 20
 		dungeonMaxTab["Deadmines"] = 26
@@ -231,6 +241,10 @@ function frame:OnEvent(event,...)
 		dungeonMaxTab["Sunken Temple"] = 52
 		dungeonMaxTab["Blackrock Depths"] = 56
 		dungeonMaxTab["Dire Maul"] = 60
+		dungeonMaxTab["Upper Blackrock Spire"] = 60
+		dungeonMaxTab["Lower Blackrock Spire"] = 60
+		dungeonMaxTab["Stratholme"] = 60
+		dungeonMaxTab["Scholomance"] = 60
 		
 		--ChatFrame1:AddMessage(dungeonDict["Deadmines"][2])
 	end
@@ -240,7 +254,6 @@ end
 
 local function handler(msg, editbox) 
 	--ChatFrame1:AddMessage("test")
-	
 	
 	if string.lower(msg) == "clear" then 
 		go_mtab = {}
@@ -255,7 +268,12 @@ local function handler(msg, editbox)
 	
 		if (msg ~= nil and string.lower(msg) == "all") or ( UnitLevel("player") >= dungeonMinTab[k] and UnitLevel("player") <= dungeonMaxTab[k] ) then 
 			anything = true
-			ChatFrame1:AddMessage(k.." ("..dungeonMinTab[k].."-"..dungeonMaxTab[k]..")")
+			
+			--ChatFrame1:AddMessage(k.." ("..dungeonMinTab[k].."-"..dungeonMaxTab[k]..")")
+			
+			local messages = {}
+			
+			
 			for k1,v1 in pairs(v) do 
 				for k2,v2 in pairs(v1) do
 					timePast = go_ttab[k.."#"..k1.."#"..k2.."#"..v2]
@@ -274,10 +292,18 @@ local function handler(msg, editbox)
 					end
 					
 					if timeDiff < maxMinutes * 60 then 
-						ChatFrame1:AddMessage("  "..k1..": "..k2.." Role: "..v2.." "..timeMessage)
+						table.insert(messages, "  "..k1..": "..k2.." Role: "..v2.." "..timeMessage)
 					end
 				end
 			end
+			
+			if #messages > 0 then
+				ChatFrame1:AddMessage(k.." ("..dungeonMinTab[k].."-"..dungeonMaxTab[k]..")")
+				for mi=1,#messages,1 do 
+					ChatFrame1:AddMessage(messages[mi])
+				end
+			end
+			
 		end
 	end
 	
